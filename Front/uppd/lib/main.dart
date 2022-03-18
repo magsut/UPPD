@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/widgets.dart';
 import 'package:uppd/pages/loading.dart';
 
 void main() {
@@ -35,48 +36,35 @@ class _MyHomePageState extends State<MyHomePage> {
   @override
   Widget build(BuildContext context) => MaterialApp(
     theme: ThemeData(
-      canvasColor: const Color(0xFFFFFFFF),
+      canvasColor: const Color(0xFF141414),
     ),
     home: Scaffold(
       endDrawer: Drawer(
         child: Padding(
-          padding: const EdgeInsets.only(top: 40, left: 20),
+          padding: const EdgeInsets.only(top: 80, left: 20),
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              const Text(
-                "Luka's Weather",
-                style: TextStyle(
-                  color: Colors.black,
-                  fontSize: 30,
-                  fontFamily: 'Manrope-bold',
-                  fontWeight: FontWeight.w800,
-                  letterSpacing: 1,
-                ),
+              const Image(
+                  image: AssetImage('assets/logo.png')
               ),
               Container(
-                padding: const EdgeInsets.only(top: 60),
-                height: 200,
+                padding: const EdgeInsets.only(top: 100),
+                height: 260,
                 child: Column(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
                     Row(
                       children: [
-                        const Image(
-                            image: AssetImage('assets/Settings.png'),
-                            height: 25,
-                            width: 25,
-                            fit: BoxFit.fill),
                         Padding(
                           padding: const EdgeInsets.only(left: 20),
                           child: GestureDetector(
                             child: const Text(
-                              'Настройки',
+                              'Личный кабинет',
                               style: TextStyle(
                                 fontSize: 20,
-                                color: Colors.black,
-                                fontFamily: 'Manrope',
-                                fontWeight: FontWeight.w500,
+                                color: Colors.white,
+                                fontWeight: FontWeight.w400,
                                 letterSpacing: 1,
                               ),
                             ),
@@ -86,21 +74,15 @@ class _MyHomePageState extends State<MyHomePage> {
                     ),
                     Row(
                       children: [
-                        const Image(
-                            image: AssetImage('assets/Favourite.png'),
-                            height: 25,
-                            width: 25,
-                            fit: BoxFit.fill),
                         Padding(
                           padding: const EdgeInsets.only(left: 20),
                           child: GestureDetector(
                             child: const Text(
-                              'Избранные',
+                              'Друзья',
                               style: TextStyle(
                                 fontSize: 20,
-                                color: Colors.black,
-                                fontFamily: 'Manrope',
-                                fontWeight: FontWeight.w500,
+                                color: Colors.white,
+                                fontWeight: FontWeight.w400,
                                 letterSpacing: 1,
                               ),
                             ),
@@ -110,11 +92,6 @@ class _MyHomePageState extends State<MyHomePage> {
                     ),
                     Row(
                       children: [
-                        const Image(
-                            image: AssetImage('assets/AboutUs.png'),
-                            height: 25,
-                            width: 25,
-                            fit: BoxFit.fill),
                         Padding(
                           padding: const EdgeInsets.only(left: 20),
                           child: GestureDetector(
@@ -123,9 +100,8 @@ class _MyHomePageState extends State<MyHomePage> {
                               'О Приложении',
                               style: TextStyle(
                                 fontSize: 20,
-                                color: Colors.black,
-                                fontFamily: 'Manrope',
-                                fontWeight: FontWeight.w500,
+                                color: Colors.white,
+                                fontWeight: FontWeight.w400,
                                 letterSpacing: 1,
                               ),
                             ),
@@ -136,6 +112,25 @@ class _MyHomePageState extends State<MyHomePage> {
                   ],
                 ),
               ),
+
+              Container(
+                  padding: const EdgeInsets.only(top: 100, right: 20),
+                  height: 260,
+                  child: Align(
+                  alignment: Alignment.bottomRight,
+                  child: GestureDetector(
+                    child: const Text(
+                      'Выйти с аккаунта',
+                      style: TextStyle(
+                        fontSize: 15,
+                        color: Colors.white,
+                        fontWeight: FontWeight.w400,
+                        letterSpacing: 1,
+                      ),
+                    ),
+                  ),
+                )
+                )
             ],
           ),
         ),
