@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/painting.dart';
 
 class Singup extends StatefulWidget {
   const Singup({Key? key}) : super(key: key);
@@ -10,12 +11,13 @@ class Singup extends StatefulWidget {
 class _SingupState extends State<Singup> {
   TextEditingController nameController = TextEditingController();
   TextEditingController passwordController = TextEditingController();
+  TextEditingController passwordConfirmController = TextEditingController();
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
         body:Padding(
-        padding: const EdgeInsets.only(left: 10,top: 20),
+        padding: const EdgeInsets.only(top: 20),
         child: ListView(
           children: <Widget>[
             Container(
@@ -48,52 +50,96 @@ class _SingupState extends State<Singup> {
                       letterSpacing:2),
                 )),
             Container(
-              padding: const EdgeInsets.only(left: 30,top: 20,right: 30),
+                alignment: Alignment.centerLeft,
+                margin: const EdgeInsets.only(left: 32,top: 20,bottom: 5),
+                padding: const EdgeInsets.only(top: 0,bottom: 5),
+                child: const Text(
+                  'E-mail',
+                  style: TextStyle(fontSize: 14,
+                      fontWeight: FontWeight.w900,
+                      letterSpacing:2),
+                )),
+            Container(
+              height: 45,
+              decoration: BoxDecoration(
+                  borderRadius: BorderRadius.circular(40),
+                  color: const Color(0xffF1F1F1)),
+              margin: const EdgeInsets.only(left: 30,top: 0,right: 30),
               child: TextField(
+                style: const TextStyle(
+                    fontSize: 16,
+                    fontWeight: FontWeight.w500
+                ),
+                keyboardType: TextInputType.emailAddress,
                 controller: nameController,
-                decoration:  InputDecoration(
-                  border: OutlineInputBorder(
-                      borderRadius: BorderRadius.circular(30)
-                  ),
-                  fillColor: Color(0xffF1F1F1),
-                  filled: true,
-                  labelText: 'E-mail',
+                decoration:  const InputDecoration(
+                  contentPadding:EdgeInsets.only(left: 20,bottom: 0) ,
+                  border: InputBorder.none,
                 ),
               ),
             ),
             Container(
-              padding: const EdgeInsets.only(left: 30,top: 20,right: 30),
-              child: TextField(
-                controller: nameController,
-                decoration:  InputDecoration(
-                  border: OutlineInputBorder(
-                      borderRadius: BorderRadius.circular(30),
-                      borderSide: const BorderSide(color: Color(0xffF1F1F1))
-                  ),
-                  fillColor: Color(0xffF1F1F1),
-                  filled: true,
-                  labelText: 'Пароль',
-                ),
-              ),
-            ),
+                alignment: Alignment.centerLeft,
+                margin: const EdgeInsets.only(left: 32,top: 20,bottom: 5),
+                padding: const EdgeInsets.only(top: 0,bottom: 5),
+                child: const Text(
+                  'Пароль',
+                  style: TextStyle(fontSize: 14,
+                      fontWeight: FontWeight.w900,
+                      letterSpacing:2),
+                )),
             Container(
-              padding: const EdgeInsets.only(left: 30,top: 20, right: 30,bottom: 50),
+              height: 45,
+              decoration: BoxDecoration(
+                  borderRadius: BorderRadius.circular(40),
+                  color: const Color(0xffF1F1F1)),
+              margin: const EdgeInsets.only(left: 30,top: 0,right: 30),
               child: TextField(
+                style: const TextStyle(
+                    fontSize: 16,
+                    fontWeight: FontWeight.w500
+                ),
                 obscureText: true,
                 controller: passwordController,
-                decoration:  InputDecoration(
-                  border: OutlineInputBorder(
-                    borderRadius: BorderRadius.circular(30)
-                  ),
-                  fillColor: Color(0xffF1F1F1),
-                  filled: true,
-                  labelText: 'Повторите пароль',
+                decoration:  const InputDecoration(
+                  contentPadding:EdgeInsets.only(left: 20,bottom: 0) ,
+                  border: InputBorder.none,
+                ),
+              ),
+            ),
+            Container(
+                alignment: Alignment.centerLeft,
+                margin: const EdgeInsets.only(left: 32,top: 20,bottom: 5),
+                padding: const EdgeInsets.only(top: 0,bottom: 5),
+                child: const Text(
+                  'Повторите пароль',
+                  style: TextStyle(fontSize: 14,
+                      fontWeight: FontWeight.w900,
+                      letterSpacing:2),
+                )),
+            Container(
+              height: 45,
+              decoration: BoxDecoration(
+                  borderRadius: BorderRadius.circular(40),
+                  color: const Color(0xffF1F1F1)),
+              margin: const EdgeInsets.only(left: 30,top: 0,right: 30),
+              child: TextField(
+                style: const TextStyle(
+                    fontSize: 16,
+                    fontWeight: FontWeight.w500
+                ),
+                obscureText: true,
+                controller: passwordConfirmController,
+                decoration:  const InputDecoration(
+                  contentPadding:EdgeInsets.only(left: 20,bottom: 0) ,
+                  border: InputBorder.none,
                 ),
               ),
             ),
 
             Container(
                 height: 50,
+                margin: const EdgeInsets.only(top: 60),
                 padding: const EdgeInsets.only(left: 40,top: 0, right: 40,),
                 child: ElevatedButton(
                     style: ButtonStyle(
