@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:uppd/pages/loading.dart';
+import 'package:uppd/pages/loginSingup.dart';
 
 void main() {
   runApp(const MyApp());
@@ -95,7 +96,7 @@ class _MyHomePageState extends State<MyHomePage> {
                         Padding(
                           padding: const EdgeInsets.only(left: 20),
                           child: GestureDetector(
-                            onTap: () {Navigator.of(context).push(MaterialPageRoute(builder: (_) => const Loading()));},
+                            onTap: () {Navigator.of(context).push(MaterialPageRoute(builder: (_) => const Singup()));},
                             child: const Text(
                               'О Приложении',
                               style: TextStyle(
