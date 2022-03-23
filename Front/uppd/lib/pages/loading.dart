@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:uppd/pages/profile.dart';
 import 'package:uppd/pages/singup.dart';
 
 
@@ -26,6 +27,20 @@ class Loading extends StatelessWidget {
                       image: AssetImage('assets/logo.png')
                   ),)
                 ),
+              ),
+              Center(
+                  child: Padding(
+                    padding: const EdgeInsets.only(top: 20),
+                    child: GestureDetector(
+                      onTap: () {Navigator.of(context).push(MaterialPageRoute(builder: (_) =>  ExampleExpert()));},
+                      child:const Image(
+                          image: AssetImage('assets/logo.png')
+
+                      ),
+
+
+                    ),
+                  )
               ),
               const Center(
                 child: Padding(
