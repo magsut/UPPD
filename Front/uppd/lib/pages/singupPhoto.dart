@@ -1,5 +1,9 @@
+import 'dart:io';
+
 import 'package:flutter/material.dart';
 import 'package:flutter/painting.dart';
+import 'package:flutter/services.dart';
+import 'package:image_picker/image_picker.dart';
 
 class SingupPhoto extends StatefulWidget {
   const SingupPhoto({Key? key}) : super(key: key);
@@ -10,6 +14,20 @@ class SingupPhoto extends StatefulWidget {
 
 class _SingupPhotoState extends State<SingupPhoto> {
   TextEditingController nameController = TextEditingController();
+
+  File? image;
+
+  Future pickImage() async {
+    try {
+      final image = await ImagePicker().pickImage(source: ImageSource.gallery);
+      if (image == null) return;
+
+      final imageTemporary = File(image.path);
+      setState(() => this.image = imageTemporary);
+    } on PlatformException catch (e) {
+      print('Ошибка загрузки фото: $e');
+    }
+  }
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -57,11 +75,18 @@ class _SingupPhotoState extends State<SingupPhoto> {
                     )),
 
                 Container(
-
-                  margin: const EdgeInsets.only(left: 30,top: 20,right: 30),
+                  margin: const EdgeInsets.only(left: 50,top: 30,right: 50),
                   child: GestureDetector(
-                    onTap: (){},
-                    child: const Image(
+                    onTap: (){pickImage();},
+                    child: image != null
+                        ? ClipOval(
+                        child:Image.file(
+                          image!,
+                          width: 100,
+                          height:300,
+
+                          fit: BoxFit.cover,
+                        )) :const Image(
                       image: AssetImage('assets/uploadPhotos.png'),
                   ),),
                 ),
