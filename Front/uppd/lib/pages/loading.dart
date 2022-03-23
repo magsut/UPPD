@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:uppd/pages/singup.dart';
 
 
 class Loading extends StatelessWidget {
@@ -12,19 +13,21 @@ class Loading extends StatelessWidget {
           Container(
             width: double.infinity,
             height: double.infinity,
-            color: Color(0xFFFFFFFF),
+            color: const Color(0xFFFFFFFF),
           ),
           Column(
-            children: const [
+            children:  [
               Center(
                 child: Padding(
-                  padding: EdgeInsets.only(top: 200),
-                  child:Image(
+                  padding: const EdgeInsets.only(top: 200),
+                  child: GestureDetector(
+                    onTap: () {Navigator.of(context).push(MaterialPageRoute(builder: (_) => const Singup()));},
+                  child:const Image(
                       image: AssetImage('assets/logo.png')
-                  ),
+                  ),)
                 ),
               ),
-              Center(
+              const Center(
                 child: Padding(
                   padding: EdgeInsets.only(top: 200),
                   child: SizedBox(

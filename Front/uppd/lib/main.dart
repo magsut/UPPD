@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:uppd/pages/loading.dart';
-import 'package:uppd/pages/loginSingup.dart';
+import 'package:uppd/pages/singup.dart';
 
 void main() {
   runApp(const MyApp());
@@ -36,9 +36,6 @@ class _MyHomePageState extends State<MyHomePage> {
 
   @override
   Widget build(BuildContext context) => MaterialApp(
-    theme: ThemeData(
-      canvasColor: const Color(0xFF141414),
-    ),
     home: Scaffold(
       endDrawer: Drawer(
         child: Padding(
