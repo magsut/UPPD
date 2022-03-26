@@ -1,7 +1,7 @@
 'use strict'
 
-import { initializeApp } from 'firebase/app';
-import { getDatabase } from "firebase/database";
+const { initializeApp } = require( 'firebase/app');
+const { getDatabase } = require( "firebase/database");
 
 const firebaseConfig = {
     apiKey: "AIzaSyCtke7fX16Hur0tGs638zJxAtxnt8nDIe0",
