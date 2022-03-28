@@ -10,27 +10,25 @@ const connection = mysql.createConnection({
     password: "1234"
 })
 
-function initCon(){
+async function initCon(){
     connection.connect( err => {
         if(err) {
             console.log(err);
-            throw err;
+            throw new Error(err);
         }
         else console.log("Connection - ok");
     })
 }
 
-function insertUser(userPas, userName, userToken){
-    let id;
+async function insertUser(userPas, userName, userToken, res){
     let query = `insert into uppd.user (token, UserName, Password) values ('${userToken}', '${userName}', '${userPas}');`;
     connection.query(query, (err, result) => {
         if(err){
-            throw err;
+            console.log(err);
+            res.status(500).end(err.toString());
         }
-        console.log(result.insertId);
-        id = result.insertId;
-    })
-    return id;
+        res.end(userToken);
+    });
 }
 
 exports.initCon = initCon;
