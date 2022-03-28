@@ -1,0 +1,3 @@
+const JWT_SECRET_KEY = "ILYA_LUK_DELAET_GOOOD_PUK";
+
+module.exports = JWT_SECRET_KEY;
