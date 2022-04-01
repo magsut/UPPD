@@ -40,7 +40,7 @@ async function searchUser(userPas, userName, res){
             return res.status(500).end(err.toString());
         }
         if(!result.length){
-            return res.status(400).end("Нету юзера");
+            return res.status(400).end("User is not foundUser is not found");
         }
         console.log(result[0].iduser);
         res.status(200).end(getJWToken(userPas, userName));
