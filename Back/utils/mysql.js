@@ -8,7 +8,7 @@ const connection = mysql.createConnection({
     port: "3306",
     user: "root",
     database: "uppd",
-    password: "1234"
+    password: "iliailia2002"
 })
 
 async function initCon(){

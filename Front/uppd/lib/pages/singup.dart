@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/painting.dart';
+import 'package:uppd/manager/reg_post.dart';
 import 'package:uppd/pages/login.dart';
 import 'package:uppd/pages/singupName.dart';
 import 'package:uppd/pages/singupPhoto.dart';
@@ -12,9 +13,11 @@ class Singup extends StatefulWidget {
 }
 
 class _SingupState extends State<Singup> {
-  TextEditingController emailController = TextEditingController();
+  TextEditingController usernameController = TextEditingController();
   TextEditingController passwordController = TextEditingController();
   TextEditingController passwordConfirmController = TextEditingController();
+  var name;
+  var pas;
 
   @override
   Widget build(BuildContext context) {
@@ -73,8 +76,10 @@ class _SingupState extends State<Singup> {
                     fontSize: 16,
                     fontWeight: FontWeight.w500
                 ),
-                keyboardType: TextInputType.emailAddress,
-                controller: emailController,
+                controller: usernameController,
+                onChanged: (value){
+                  name = value;
+                },
                 decoration:  const InputDecoration(
                   contentPadding:EdgeInsets.only(left: 20,bottom: 0) ,
                   border: InputBorder.none,
@@ -104,6 +109,9 @@ class _SingupState extends State<Singup> {
                 ),
                 obscureText: true,
                 controller: passwordController,
+                onChanged: (value){
+                  pas = value;
+                },
                 decoration:  const InputDecoration(
                   contentPadding:EdgeInsets.only(left: 20,bottom: 0) ,
                   border: InputBorder.none,
@@ -157,8 +165,9 @@ class _SingupState extends State<Singup> {
                     style: TextStyle(fontSize: 18,
                         fontWeight: FontWeight.w600),),
                   onPressed: () {
-                    print(emailController.text);
-                    print(passwordController.text);
+                    print(name);
+                    print(pas);
+                    singup(name, pas);
                     Navigator.push(context,MaterialPageRoute(builder: (context) => const SingupName()));
                   },
                 )
