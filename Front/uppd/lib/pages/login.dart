@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/painting.dart';
-import 'package:uppd/manager/ath.dart';
+import 'package:uppd/manager/auth.dart';
 import 'package:uppd/pages/profile.dart';
 import 'package:uppd/manager/auth.dart';
 
@@ -155,7 +155,7 @@ class _LoginState extends State<Login> {
                       onPressed: () {
                         print(name);
                         print(pas);
-                        login(name, pas);
+                        /*login(name, pas);*/
                         singMeIn();
                       },
                     )
