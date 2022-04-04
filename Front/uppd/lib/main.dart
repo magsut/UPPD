@@ -1,6 +1,8 @@
+import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:uppd/pages/loading.dart';
+import 'package:uppd/pages/profile.dart';
 import 'package:uppd/pages/singup.dart';
 
 void main() {
@@ -33,6 +35,7 @@ class MyHomePage extends StatefulWidget {
 }
 
 class _MyHomePageState extends State<MyHomePage> {
+
 
   @override
   Widget build(BuildContext context) => MaterialApp(
@@ -134,7 +137,24 @@ class _MyHomePageState extends State<MyHomePage> {
         ),
       ),
       body:
-            const Loading()
+      FutureBuilder(
+        // Initialize FlutterFire
+        future: Firebase.initializeApp(),
+        builder: (context, snapshot) {
+          // Check for errors
+          if (snapshot.hasError) {
+            return ExampleExpert();
+          }
+
+          // Once complete, show your application
+          if (snapshot.connectionState == ConnectionState.done) {
+            return Singup();
+          }
+
+          // Otherwise, show something whilst waiting for initialization to complete
+          return Loading();
+        },
+      )
 
     ),
   );

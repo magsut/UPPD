@@ -1,46 +1,42 @@
-import 'package:firebase_auth/firebase_auth.dart';
+import 'package:firebase_auth/firebase_auth.dart' as auth;
 
 import '../models/user.dart';
 
 class AuthServices {
-  final FirebaseAuth _auth = FirebaseAuth.instance;
+  final auth.FirebaseAuth _firebaseAuth = auth.FirebaseAuth.instance;
 
-  User? _userFromFirebaseUser(FirebaseUser user) {
-    return user != null ? User(uid: user.uid) : null;
-  }
-
-  Future signInWithEmailAndPassword(String email, String password) async {
-    try {
-      AuthResult result = await _auth.signInWithEmailAndPassword(
-          email: email, password: password);
-      FirebaseUser user = result.user;
-      return _userFromFirebaseUser(user);
-    } catch (e) {
-      print(e.toString());
+  User? _userFromFirebase(auth.User? user) {
+    if (user==null){
       return null;
     }
+    return User(user.uid, user.email);
+  }
+  Stream<User?>? get user {
+    return _firebaseAuth.authStateChanges().map(_userFromFirebase);
   }
 
-  Future signUpWithEmailAndPassword(String email, String password) async {
-    try {
-      AuthResult result = await _auth.createUserWithEmailAndPassword(
-          email: email, password: password);
-      FirebaseUser user = result.user;
-      return _userFromFirebaseUser(user);
-    } catch (e) {
-      print(e.toString());
-      return null;
-    }
+
+  Future<User?> signInWithEmailAndPassword(
+      String email,
+      String password,
+      ) async{
+    final credential = await _firebaseAuth.signInWithEmailAndPassword(email: email, password: password);
+    return _userFromFirebase(credential.user);
   }
-  Future signOut() async {
-    try {
-      return await _auth.signOut();
-    } catch (e) {
-      print(e.toString());
-      return null;
-    }
+
+  Future<User?> createUserWithEmailAndPassword(
+      String email,
+      String password,
+      ) async{
+    final credential = await auth.FirebaseAuth.instance.createUserWithEmailAndPassword(email: email, password: password);
+    return _userFromFirebase(credential.user);}
+
+
+  Future<void> singOut() async{
+    return await _firebaseAuth.signOut();}
   }
-}
+
+
 
 
 

@@ -1,6 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/painting.dart';
 import 'package:uppd/manager/ath.dart';
+import 'package:uppd/pages/profile.dart';
+import 'package:uppd/manager/auth.dart';
+
+import 'loading.dart';
 
 
 class Login extends StatefulWidget {
@@ -11,16 +15,31 @@ class Login extends StatefulWidget {
 }
 
 class _LoginState extends State<Login> {
+  bool isLoading = false;
   TextEditingController emailController = TextEditingController();
   TextEditingController passwordController = TextEditingController();
   TextEditingController passwordConfirmController = TextEditingController();
   var name;
   var pas;
+  AuthServices authServices = AuthServices();
+
+  singMeIn(){
+    setState(() {
+      isLoading  = true;
+    });
+    authServices.signInWithEmailAndPassword(emailController.text, passwordController.text).then((val){
+      print('${val?.uid}');
+      Navigator.push(context, MaterialPageRoute(
+          builder: (context) => ExampleExpert()));
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-        body:Padding(
+        body:isLoading ?  Container(
+          child: const Loading(),
+        ):Padding(
             padding: const EdgeInsets.only(top: 20),
             child: ListView(
               children: <Widget>[
@@ -137,6 +156,7 @@ class _LoginState extends State<Login> {
                         print(name);
                         print(pas);
                         login(name, pas);
+                        singMeIn();
                       },
                     )
                 ),

@@ -28,20 +28,6 @@ class Loading extends StatelessWidget {
                   ),)
                 ),
               ),
-              Center(
-                  child: Padding(
-                    padding: const EdgeInsets.only(top: 20),
-                    child: GestureDetector(
-                      onTap: () {Navigator.of(context).push(MaterialPageRoute(builder: (_) =>  ExampleExpert()));},
-                      child:const Image(
-                          image: AssetImage('assets/logo.png')
-
-                      ),
-
-
-                    ),
-                  )
-              ),
               const Center(
                 child: Padding(
                   padding: EdgeInsets.only(top: 200),
