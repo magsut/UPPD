@@ -200,7 +200,7 @@ class _SingupState extends State<Singup> {
                       onPressed: () {
                         print(name);
                         print(pas);
-                        singup(name, pas);
+                        singup(name, pas,'koklush', '34', 'jydjyytdhr');
                         singMeUp();
                       },
                     )

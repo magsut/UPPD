@@ -4,7 +4,6 @@ const API_BASE_URL = '/api/';
 
 const AVAILABLE_ENDPOINTS = [
     'testEndpoint',
-    'massages',
     'user'
 ];
 

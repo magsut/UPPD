@@ -1,3 +1,4 @@
 {
-  "SocketPath": 3000
+  "SocketPath": 3000,
+  "StoragePath": "./icons"
 }

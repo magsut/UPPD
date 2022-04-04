@@ -1,27 +1,31 @@
 'use strict';
 
-const {insertUser, searchUser, newChat} = require("../utils/mysql");
-const {getJWToken} = require('../lib/generateToken');
+const {insertUser /*searchUser*/} = require("../utils/mysql");
 const sha256 = require('crypto-js/sha256');
+const {getDate} = require('../lib/DateFormat');
+const {copyFile} = require('../lib/filestorage');
 
 class User{
     async createAc(req, res){
-        console.log('123');
         try {
-            const {pas, name} = req.body;
-            if(!pas || !name){
+            const {pas, login, name, age, token} = req.body;
+            if(!pas || !name || !age || !token || !login){
                 return res.status(400).end('Sosi');
             }
-            let passHash = sha256(pas).toString();
-            let jwt = getJWToken(passHash, name);
-            await insertUser(passHash, name, jwt, res);
+            const passHash = sha256(pas).toString();
+            let filename = req.file && req.file.filename;
+            if(!filename){
+                filename = getDate() + '-' + 'standard.png';
+                await copyFile('standart.png', filename);
+            }
+            await insertUser(passHash, login, name, age, token, filename, res);
         } catch (e) {
-            console.log(e.massage);
+            console.log(e);
             res.status(500).end("We have some problems! " + e.massage);
         }
     }
 
-    async login(req, res){
+    /*async login(req, res){
         try {
             const {pas, name} = req.body;
             let passHash = sha256(pas).toString();
@@ -30,17 +34,9 @@ class User{
             console.log(e.massage);
             res.status(500).end("We have some problems! " + e.massage);
         }
-    }
+    }*/
 
-    async newChat(req, res){
-        try {
-            const {name, token, chatName} = req.body;
-            await newChat(name, token, chatName, res);
-        } catch (e){
-            console.log(e.massage);
-            res.status(500).end("We have some problems! " + e.massage);
-        }
-    }
+
 }
 
 module.exports = new User();
