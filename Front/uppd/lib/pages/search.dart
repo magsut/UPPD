@@ -1,4 +1,3 @@
-/*
 
 import 'package:flutter/material.dart';
 
@@ -112,4 +111,3 @@ class SearchTitle extends StatelessWidget {
     );
   }
 }
-*/
