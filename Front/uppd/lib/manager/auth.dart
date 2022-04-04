@@ -1,5 +1,6 @@
 import 'package:firebase_auth/firebase_auth.dart' as auth;
-
+import 'dart:convert';
+import 'package:http/http.dart' as http;
 import '../models/user.dart';
 
 class AuthServices {
@@ -54,50 +55,34 @@ class AuthServices {
 
 
 
+singup(String name,pas) async {
+final http.Response response = await http.post(
+  Uri.parse('http://10.0.2.2:3000/api/user/createAc'),
+  headers: <String, String>{
+    'Content-Type': 'application/json; charset=UTF-8',
+    },
+  body: jsonEncode(<String, String>{
+    'pas': pas,
+    'name':name,
+    }),
+  );
+print(response.body);
+    // print(response.body);
 
+}
+login(String name,pas) async {
+  final http.Response response = await http.post(
+    Uri.parse('http://10.0.2.2:3000/api/user/login'),
+    headers: <String, String>{
+      'Content-Type': 'application/json; charset=UTF-8',
+    },
+    body: jsonEncode(<String, String>{
+      'pas': pas,
+      'name':name,
+    }),
+  );
+print(response.body);
+  // print(response.body);
 
-
-
-
-
-
-
-
-
-
-
-
+}
 //
-// import 'dart:convert';
-// import 'package:http/http.dart' as http;
-//
-// singup(String name,pas) async {
-// final http.Response response = await http.post(
-//   Uri.parse('http://localhost:3000/api/user/createAc'),
-//   headers: <String, String>{
-//     'Content-Type': 'application/json; charset=UTF-8',
-//     },
-//   body: jsonEncode(<String, String>{
-//     'pas': pas,
-//     'name':name,
-//     }),
-//   );
-// print(response.body);
-//     // print(response.body);
-//
-// }
-// login(String name,pas) async {
-//   final http.Response response = await http.post(
-//     Uri.parse('http://localhost:3000/api/user/login'),
-//     headers: <String, String>{
-//       'Content-Type': 'application/json; charset=UTF-8',
-//     },
-//     body: jsonEncode(<String, String>{
-//       'pas': pas,
-//       'name':name,
-//     }),
-//   );
-// print(response.body);
-//   // print(response.body);
-//
-// }

@@ -1,11 +1,12 @@
 'use strict';
 
-const {insertUser, searchUser} = require("../utils/mysql");
+const {insertUser, searchUser, newChat} = require("../utils/mysql");
 const {getJWToken} = require('../lib/generateToken');
 const sha256 = require('crypto-js/sha256');
 
 class User{
     async createAc(req, res){
+        console.log('123');
         try {
             const {pas, name} = req.body;
             if(!pas || !name){
@@ -24,7 +25,17 @@ class User{
         try {
             const {pas, name} = req.body;
             let passHash = sha256(pas).toString();
-            searchUser(passHash, name, res);
+            await searchUser(passHash, name, res);
+        } catch (e){
+            console.log(e.massage);
+            res.status(500).end("We have some problems! " + e.massage);
+        }
+    }
+
+    async newChat(req, res){
+        try {
+            const {name, token, chatName} = req.body;
+            await newChat(name, token, chatName, res);
         } catch (e){
             console.log(e.massage);
             res.status(500).end("We have some problems! " + e.massage);

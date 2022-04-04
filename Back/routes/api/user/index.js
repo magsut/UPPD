@@ -7,4 +7,6 @@ router.post('/createAc', express.json(),async (req, res) =>  User.createAc(req, 
 
 router.post('/login', express.json(), async (req,res) => User.login(req, res));
 
+router.post('/newChat', express.json(), async (req, res) => User.newChat(req, res));
+
 module.exports = router;

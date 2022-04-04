@@ -8,7 +8,7 @@ const connection = mysql.createConnection({
     port: "3306",
     user: "root",
     database: "uppd",
-    password: "iliailia2002"
+    password: "1234"
 })
 
 async function initCon(){
@@ -40,14 +40,69 @@ async function searchUser(userPas, userName, res){
             return res.status(500).end(err.toString());
         }
         if(!result.length){
-            return res.status(400).end("User is not foundUser is not found");
+            return res.status(400).end("User is not found");
         }
         console.log(result[0].iduser);
         res.status(200).end(getJWToken(userPas, userName));
     })
 }
 
+async function newChat(userName, token, chatName, res){
+    let query = `SELECT iduser FROM uppd.user where user.UserName = '${userName}';`;
+    connection.query(query, (err, result) => {
+        if(err){
+            console.log(err);
+            return res.status(500).end(err.toString());
+        }
+        if(!result.length){
+            return res.status(400).end("User is not found");
+        }
+        var findId = result[0].iduser;
+        console.log(findId);
+        query = `SELECT iduser FROM uppd.user where user.token = '${token}';`;
+        connection.query(query, (err, result) => {
+            if(err){
+                console.log(err);
+                return res.status(500).end('Что-то пошло не так, токен не действителен');
+            }
+            if(!result.length){
+                return res.status(400).end("Что-то пошло не так, токен не действителен");
+            }
+            var userId = result[0].iduser;
+            console.log(userId);
+            query = `insert into uppd.chat (chatName) values ('${chatName}');`;
+            connection.query(query, (err, result) => {
+                if(err){
+                    console.log(err);
+                    return res.status(500).end('Что-то пошло не так');
+                }
+                var chatId = result.insertId;
+                console.log(chatId);
+                if (!chatId){
+                    return res.status(500).end('Unexpected error');
+                }
+                query = `INSERT INTO uppd.user_has_chat (User_idUser, Chat_idChat) VALUES ('${findId}', '${chatId}');` +
+                    `INSERT INTO uppd.user_has_chat (User_idUser, Chat_idChat) VALUES ('${userId}', '${chatId}');`
+                connection.query(query, (err, result) => {
+                    if(err){
+                        console.log(err);
+                        return res.status(500).end(err.toString());
+                    }
+                });
+                // addChatToUser(findId, chatId);
+                // addChatToUser(userId, chatId);
+            });
+        });
+    })
+}
+
+async function addChatToUser(userId, chatId){
+    let query = `INSERT INTO uppd.user_has_chat (User_idUser, Chat_idChat) VALUES ('${userId}', '${chatId}');`;
+}
+
 exports.searchUser = searchUser;
+
+exports.newChat = newChat;
 
 exports.initCon = initCon;
 
