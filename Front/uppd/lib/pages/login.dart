@@ -1,8 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/painting.dart';
-import 'package:uppd/pages/loading.dart';
-import 'package:uppd/pages/singupName.dart';
-import 'package:uppd/pages/singupPhoto.dart';
+import 'package:uppd/manager/ath.dart';
+
 
 class Login extends StatefulWidget {
   const Login({Key? key}) : super(key: key);
@@ -15,6 +14,8 @@ class _LoginState extends State<Login> {
   TextEditingController emailController = TextEditingController();
   TextEditingController passwordController = TextEditingController();
   TextEditingController passwordConfirmController = TextEditingController();
+  var name;
+  var pas;
 
   @override
   Widget build(BuildContext context) {
@@ -73,8 +74,10 @@ class _LoginState extends State<Login> {
                         fontSize: 16,
                         fontWeight: FontWeight.w500
                     ),
-                    keyboardType: TextInputType.emailAddress,
                     controller: emailController,
+                    onChanged: (value){
+                      name = value;
+                    },
                     decoration:  const InputDecoration(
                       contentPadding:EdgeInsets.only(left: 20,bottom: 0) ,
                       border: InputBorder.none,
@@ -104,6 +107,9 @@ class _LoginState extends State<Login> {
                     ),
                     obscureText: true,
                     controller: passwordController,
+                    onChanged: (value){
+                      pas = value;
+                    },
                     decoration:  const InputDecoration(
                       contentPadding:EdgeInsets.only(left: 20,bottom: 0) ,
                       border: InputBorder.none,
@@ -128,9 +134,9 @@ class _LoginState extends State<Login> {
                         style: TextStyle(fontSize: 18,
                             fontWeight: FontWeight.w600),),
                       onPressed: () {
-                        print(emailController.text);
-                        print(passwordController.text);
-                        Navigator.push(context,MaterialPageRoute(builder: (context) => const Loading()));
+                        print(name);
+                        print(pas);
+                        login(name, pas);
                       },
                     )
                 ),

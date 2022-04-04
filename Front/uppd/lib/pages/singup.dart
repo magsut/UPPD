@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/painting.dart';
-import 'package:uppd/manager/reg_post.dart';
+import 'package:uppd/manager/ath.dart';
 import 'package:uppd/pages/login.dart';
 import 'package:uppd/pages/singupName.dart';
 import 'package:uppd/pages/singupPhoto.dart';
