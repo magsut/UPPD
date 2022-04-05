@@ -268,7 +268,6 @@ class _SingupState extends State<Singup> {
                             fontWeight: FontWeight.w600),),
                       onPressed: () async {if(pas == pas1){
                         await singMeUp();
-                        log("token: " + token);
                         Navigator.push(context,MaterialPageRoute(builder: (context) =>
                             SingupAge(pas: pas, login: login, name: name, token: token,)));
 
