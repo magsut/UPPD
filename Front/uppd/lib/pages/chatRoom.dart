@@ -1,10 +1,14 @@
 
 import 'package:flutter/material.dart';
+import 'package:uppd/helper/helperfunctions.dart';
 import 'package:uppd/manager/auth.dart';
 import 'package:uppd/pages/loading.dart';
 import 'package:uppd/pages/login.dart';
 import 'package:uppd/pages/profile.dart';
 import 'package:uppd/pages/search.dart';
+
+import '../helper/constants.dart';
+import '../manager/database.dart';
 
 
 class ChatRoom extends StatefulWidget {
@@ -26,6 +30,15 @@ class _ChatRoomState extends State<ChatRoom> {
       Navigator.push(context, MaterialPageRoute(
           builder: (context) => const Login()));
     });
+  }
+  @override
+  void initState() {
+    getUserInfoGetChats();
+    super.initState();
+  }
+
+  getUserInfoGetChats() async {
+    Constants.myName = (await HelperFunctions.getUserNameSharedPreference())!;
   }
 
   @override

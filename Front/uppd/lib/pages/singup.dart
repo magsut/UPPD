@@ -1,11 +1,12 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:uppd/helper/helperfunctions.dart';
 
 import 'package:uppd/manager/auth.dart';
+import 'package:uppd/manager/database.dart';
 import 'package:uppd/pages/chatRoom.dart';
 import 'package:uppd/pages/loading.dart';
 import 'package:uppd/pages/login.dart';
-import 'package:uppd/pages/profile.dart';
 
 
 class Singup extends StatefulWidget {
@@ -17,22 +18,40 @@ class Singup extends StatefulWidget {
 
 class _SingupState extends State<Singup> {
   bool isLoading = false;
+  TextEditingController emailController = TextEditingController();
   TextEditingController usernameController = TextEditingController();
   TextEditingController passwordController = TextEditingController();
   TextEditingController passwordConfirmController = TextEditingController();
+  var login;
   var name;
   var pas;
   var pas1;
   final formKey = GlobalKey<FormState>();
   AuthServices authServices = AuthServices();
+  DatabaseMethods databaseMethods = DatabaseMethods();
+
 
   singMeUp()  async {
+
+
+
     setState(() {
       isLoading  = true;
     });
     try{
-     await authServices.createUserWithEmailAndPassword(usernameController.text, passwordController.text).then((val) {
+     await authServices.createUserWithEmailAndPassword(emailController.text, passwordController.text).then((val) {
       print('${val?.uid}');
+
+      Map<String,String> userInfoMap = {
+        'name': usernameController.text,
+        'email': emailController.text
+      };
+
+      databaseMethods.uploadUserInfo(userInfoMap);
+      HelperFunctions.saveUserLoggedInSharedPreference(true);
+      HelperFunctions.saveUserNameSharedPreference(usernameController.text);
+      HelperFunctions.saveUserEmailSharedPreference(emailController.text);
+
       Navigator.push(context, MaterialPageRoute(
           builder: (context) => const ChatRoom()));
 
@@ -96,6 +115,40 @@ class _SingupState extends State<Singup> {
                 Form(child: Column(
                   key: formKey,
                   children: [
+                    Container(
+                        alignment: Alignment.centerLeft,
+                        margin: const EdgeInsets.only(
+                            left: 32, top: 20, bottom: 5),
+                        padding: const EdgeInsets.only(top: 0, bottom: 5),
+                        child: const Text(
+                          'E-mail',
+                          style: TextStyle(fontSize: 14,
+                              fontWeight: FontWeight.w900,
+                              letterSpacing: 2),
+                        )),
+                    Container(
+                      height: 45,
+                      decoration: BoxDecoration(
+                          borderRadius: BorderRadius.circular(40),
+                          color: const Color(0xffF1F1F1)),
+                      margin: const EdgeInsets.only(
+                          left: 30, top: 0, right: 30),
+                      child: TextFormField(
+                        style: const TextStyle(
+                            fontSize: 16,
+                            fontWeight: FontWeight.w500
+                        ),
+                        controller: emailController,
+                        keyboardType: TextInputType.emailAddress,
+                        onChanged: (value) {
+                          login = value;
+                        },
+                        decoration: const InputDecoration(
+                          contentPadding: EdgeInsets.only(left: 20, bottom: 0),
+                          border: InputBorder.none,
+                        ),
+                      ),
+                    ),
                     Container(
                         alignment: Alignment.centerLeft,
                         margin: const EdgeInsets.only(
@@ -219,9 +272,9 @@ class _SingupState extends State<Singup> {
                         style: TextStyle(fontSize: 18,
                             fontWeight: FontWeight.w600),),
                       onPressed: () {if(pas == pas1){
-                        print(name);
+                        print(login);
                         print(pas);
-                        singup(name, pas,'koklush', '34', 'jydjyytdhr');
+                        singup(login, pas,'koklush', '34', 'jydjyytdhr');
                         singMeUp();}
                         else {
                         showDialog<String>(

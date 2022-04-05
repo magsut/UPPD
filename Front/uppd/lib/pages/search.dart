@@ -1,5 +1,10 @@
 
+import 'package:path/path.dart';
+
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
+import 'package:uppd/helper/constants.dart';
+import 'package:uppd/pages/conversation.dart';
 
 import '../manager/database.dart';
 
@@ -11,20 +16,116 @@ class SearchScreen extends StatefulWidget {
 }
 
 class _SearchScreenState extends State<SearchScreen> {
-  DatabaseMethods databaseMethods = new DatabaseMethods();
-  TextEditingController searchEditingController = new TextEditingController();
+  DatabaseMethods databaseMethods = DatabaseMethods();
+  TextEditingController searchEditingController = TextEditingController();
+  QuerySnapshot? searchSnapshot;
+  bool isLoading = false;
+  bool haveUserSearched = false;
 
+  initiateSearch() async {
+    if(searchEditingController.text.isNotEmpty){
+      setState(() {
+        isLoading = true;
+      });
+      await databaseMethods.getUserByUsername(searchEditingController.text)
+          .then((val){
+        searchSnapshot = val;
+        print("$searchSnapshot");
+        setState(() {
+          isLoading = false;
+          haveUserSearched = true;
+        });
+      });
+    }
+  }
   Widget searchList(){
-    return ListView.builder(
-        itemCount: 1,
+    return haveUserSearched ?ListView.builder(
+        itemCount: searchSnapshot?.docs.length,
+        shrinkWrap: true,
         itemBuilder:(context, index){
           return SearchTitle(
-            username: "",
-            userEmail: "",
+            searchSnapshot?.docs[index].get('name'),
+            searchSnapshot?.docs[index].get('email'),
           );
-    });
+        }):Container() ;
   }
 
+  createChatRoomAndStartConversation(String userName){
+   if(userName != Constants.myName){
+     String chatroomId = getChatRoomId(Constants.myName,userName);
+     List<String> users = [Constants.myName,userName];
+     Map<String, dynamic>chatRoomMap = {
+       'users': users,
+       'chatroomID': chatroomId
+     };
+     databaseMethods.createChatRoom(chatRoomMap,chatroomId);
+     Navigator.push(this.context, MaterialPageRoute(
+         builder: (context) => const Conversation()));
+   }else{
+     print('you can not send message');
+   }
+  }
+
+  Widget SearchTitle(String userName,String userEmail){
+    return Container(
+      height: 70,
+      decoration: BoxDecoration(
+          borderRadius: BorderRadius.circular(40),
+          color: const Color(0xffF1F1F1)),
+      margin: const EdgeInsets.only(left: 30,top: 20,right: 30),
+      child: Row(
+          children: <Widget> [
+            Expanded(
+                child:
+                Column(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    Text(userName,style: const TextStyle(
+                        fontSize: 16,
+                        fontWeight: FontWeight.w500
+                    ), ),
+                    Text(userEmail,style: const TextStyle(
+                        fontSize: 16,
+                        fontWeight: FontWeight.w500
+                    ),)
+                  ],
+                )),
+            GestureDetector(
+                onTap:(){
+                  print('${Constants.myName}');
+                  createChatRoomAndStartConversation(
+                      userName
+                  );
+                },
+                child:
+                Container(
+                  height: 45,
+                  width: 45,
+                  decoration: BoxDecoration(
+                      color: Color(0xffED694A),
+                      borderRadius: BorderRadius.circular(40)
+                  ),
+                  padding: EdgeInsets.only(left: 0),
+                  child: const Icon(Icons.message,color: Colors.white),
+                )
+            )
+
+
+          ]),);
+  }
+  getChatRoomId(String a, String b) {
+    if (a.substring(0, 1).codeUnitAt(0) > b.substring(0, 1).codeUnitAt(0)) {
+      return "$b\_$a";
+    } else {
+      return "$a\_$b";
+    }
+  }
+
+  @override
+  void initState() {
+    super.initState();
+
+  }
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -32,6 +133,7 @@ class _SearchScreenState extends State<SearchScreen> {
         padding: const EdgeInsets.only(top: 20),
     child: ListView(
     children: <Widget>[
+
       Container(
           alignment: Alignment.centerLeft,
           padding: const EdgeInsets.only(left: 30,top: 20),
@@ -61,6 +163,7 @@ class _SearchScreenState extends State<SearchScreen> {
           children: <Widget> [
              Expanded(child:
              TextField(
+               textAlign: TextAlign.center,
                controller: searchEditingController,
               style: const TextStyle(
                   fontSize: 16,
@@ -73,54 +176,37 @@ class _SearchScreenState extends State<SearchScreen> {
                 border: InputBorder.none,
               ),
             ),),
-
-            Container(
-              height: 45,
-              width: 45,
-              decoration: BoxDecoration(
-                color: Color(0xffED694A),
-                borderRadius: BorderRadius.circular(40)
-              ),
-              padding: EdgeInsets.only(left: 0),
-              child: const Icon(Icons.search,color: Colors.white),
+            GestureDetector(
+              onTap:(){
+                initiateSearch();
+              },
+              child:
+                Container(
+                  height: 45,
+                  width: 45,
+                  decoration: BoxDecoration(
+                      color: Color(0xffED694A),
+                      borderRadius: BorderRadius.circular(40)
+                  ),
+                  padding: EdgeInsets.only(left: 0),
+                  child: const Icon(Icons.search,color: Colors.white),
+                )
             )
-      ]),)
+
+
+      ]),),
+      searchList()
+
+
 
        ]
+
     )
      ),
     );
   }
 }
 
-class SearchTitle extends StatelessWidget {
-  final String username;
-  final String userEmail;
-  SearchTitle({required this.username, required this.userEmail});
 
 
-  @override
-  Widget build(BuildContext context) {
-    return Container(
-      child: Row(
-        children: [
-          Column(
-            children: [
-              Text(username),
-              Text(userEmail)
-            ],
-          ),
-          Container(
-            decoration: BoxDecoration(
-              color: Colors.orange,
-              borderRadius: BorderRadius.circular(30)
 
-            ) ,
-            padding: const EdgeInsets.symmetric(horizontal: 16,vertical: 8) ,
-            child: const Text("Message"),
-          )
-        ],
-      ),
-    );
-  }
-}

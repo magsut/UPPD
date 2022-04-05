@@ -1,10 +1,13 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:uppd/manager/auth.dart';
+import 'package:uppd/manager/database.dart';
 import 'package:uppd/pages/chatRoom.dart';
 import 'package:uppd/pages/singup.dart';
 
 
+import '../helper/helperfunctions.dart';
 import 'loading.dart';
 
 
@@ -23,14 +26,31 @@ class _LoginState extends State<Login> {
   var name;
   var pas;
   AuthServices authServices = AuthServices();
+  DatabaseMethods databaseMethods = DatabaseMethods();
+  QuerySnapshot? snapshotUserInfo;
 
   singMeIn() async {
+
+    HelperFunctions.saveUserEmailSharedPreference(emailController.text);
+    HelperFunctions.saveUserNameSharedPreference(
+        snapshotUserInfo?.docs[0].get("userName"));
+    HelperFunctions.saveUserEmailSharedPreference(
+        snapshotUserInfo?.docs[0].get("userEmail"));
+
     setState(() {
       isLoading  = true;
+    });
+    databaseMethods.getUserByEmail(emailController.text).then((val){
+      snapshotUserInfo = val;
+      HelperFunctions.saveUserNameSharedPreference(snapshotUserInfo?.docs[0].get('name'));
+      // print('${snapshotUserInfo?.docs[0].get('name')}');
     });
     try{
    await authServices.signInWithEmailAndPassword(emailController.text, passwordController.text).then((val){
       print('${val?.uid}');
+
+      HelperFunctions.saveUserLoggedInSharedPreference(true);
+
       Navigator.push(context, MaterialPageRoute(
           builder: (context) => const ChatRoom()));
     });
