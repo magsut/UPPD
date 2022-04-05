@@ -151,7 +151,7 @@ class _SingupPhotoState extends State<SingupPhoto> {
                       ),
                       onPressed: () {
                         print(image!.path);
-                        singup(login, pas, name, age, token, image!.path);
+                        singup(name, pas, login, age, token, image!.path);
                         HelperFunctions.saveUserLoggedInSharedPreference(true);
                         HelperFunctions.saveUserNameSharedPreference(name);
                         HelperFunctions.saveUserEmailSharedPreference(login);
