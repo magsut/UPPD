@@ -25,7 +25,7 @@ class User{
         }
     }
 
-    /*async login(req, res){
+    async login(req, res){
         try {
             const {pas, name} = req.body;
             let passHash = sha256(pas).toString();
@@ -34,7 +34,7 @@ class User{
             console.log(e.massage);
             res.status(500).end("We have some problems! " + e.massage);
         }
-    }*/
+    }
 
 
 }

@@ -31,7 +31,7 @@ async function insertUser(passHash, login, name, age, token, filename, res){
     });
 }
 
-/*async function searchUser(userPas, userName, res){
+async function searchUser(userPas, userName, res){
     let query = `SELECT iduser FROM uppd.user where user.UserName = '${userName}' and user.Password = '${userPas}';`;
     connection.query(query, (err, result) => {
         if(err){
@@ -44,7 +44,7 @@ async function insertUser(passHash, login, name, age, token, filename, res){
         console.log(result[0].iduser);
         res.status(200).end(getJWToken(userPas, userName));
     })
-}*/
+}
 
 // exports.searchUser = searchUser;
 

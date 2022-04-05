@@ -40,24 +40,6 @@ class AuthServices {
   }
 }
 
-/*singup(String name, pas, login, age, token) async {
-  final http.Response response = await http.post(
-    Uri.parse('http://10.0.2.2:3000/api/user/createAc'),
-    headers: <String, String>{
-      'Content-Type': 'multipart/form-data; charset=UTF-8',
-    },
-    body: {
-      'pas': pas,
-      'login': login,
-      'name': name,
-      'age': age,
-      'token': token
-    }
-  );
-  print(response.body);
-  // print(response.body);
-}*/
-
 login(String name, pas) async {
   final http.Response response = await http.post(
     Uri.parse('http://10.0.2.2:3000/api/user/login'),
@@ -70,17 +52,17 @@ login(String name, pas) async {
     }),
   );
   print(response.body);
-  // print(response.body);
 }
 
-singup(String name, pas, login, age, token) async {
-  var request = http.MultipartRequest("POST", Uri.parse('http://10.0.2.2:3000/api/user/createAc'));
+singup(String name, pas, login, age, token, filePath) async {
+  var request = http.MultipartRequest(
+      "POST", Uri.parse('http://10.0.2.2:3000/api/user/createAc'));
   request.fields['name'] = name;
   request.fields['pas'] = pas;
   request.fields['login'] = login;
   request.fields['age'] = age;
   request.fields['token'] = token;
+  request.files.add(await http.MultipartFile.fromPath('avatar', filePath));
 
   request.send().then((value) => print(value));
-
 }

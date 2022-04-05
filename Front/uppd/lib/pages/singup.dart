@@ -1,12 +1,13 @@
+import 'dart:developer';
+
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
-import 'package:uppd/helper/helperfunctions.dart';
 
 import 'package:uppd/manager/auth.dart';
 import 'package:uppd/manager/database.dart';
-import 'package:uppd/pages/chatRoom.dart';
 import 'package:uppd/pages/loading.dart';
 import 'package:uppd/pages/login.dart';
+import 'package:uppd/pages/singupAge.dart';
 
 
 class Singup extends StatefulWidget {
@@ -26,6 +27,7 @@ class _SingupState extends State<Singup> {
   var name;
   var pas;
   var pas1;
+  var token;
   final formKey = GlobalKey<FormState>();
   AuthServices authServices = AuthServices();
   DatabaseMethods databaseMethods = DatabaseMethods();
@@ -33,14 +35,13 @@ class _SingupState extends State<Singup> {
 
   singMeUp()  async {
 
-
-
     setState(() {
       isLoading  = true;
     });
     try{
      await authServices.createUserWithEmailAndPassword(emailController.text, passwordController.text).then((val) {
       print('${val?.uid}');
+      this.token = val!.uid;
 
       Map<String,String> userInfoMap = {
         'name': usernameController.text,
@@ -48,13 +49,7 @@ class _SingupState extends State<Singup> {
       };
 
       databaseMethods.uploadUserInfo(userInfoMap);
-      HelperFunctions.saveUserLoggedInSharedPreference(true);
-      HelperFunctions.saveUserNameSharedPreference(usernameController.text);
-      HelperFunctions.saveUserEmailSharedPreference(emailController.text);
-
-      Navigator.push(context, MaterialPageRoute(
-          builder: (context) => const ChatRoom()));
-
+      return val.uid;
     });
     } on FirebaseAuthException catch (e){
       Navigator.push(context, MaterialPageRoute(
@@ -271,11 +266,13 @@ class _SingupState extends State<Singup> {
                       child: const Text('Продолжить',
                         style: TextStyle(fontSize: 18,
                             fontWeight: FontWeight.w600),),
-                      onPressed: () {if(pas == pas1){
-                        print(login);
-                        print(pas);
-                        singup(login, pas,'koklush', '34', 'jydjyytdhr');
-                        singMeUp();}
+                      onPressed: () async {if(pas == pas1){
+                        await singMeUp();
+                        log("token: " + token);
+                        Navigator.push(context,MaterialPageRoute(builder: (context) =>
+                            SingupAge(pas: pas, login: login, name: name, token: token,)));
+
+                      }
                         else {
                         showDialog<String>(
                             context: context,
