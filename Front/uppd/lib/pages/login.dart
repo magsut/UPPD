@@ -1,8 +1,9 @@
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/painting.dart';
 import 'package:uppd/manager/auth.dart';
-import 'package:uppd/pages/profile.dart';
-import 'package:uppd/manager/auth.dart';
+import 'package:uppd/pages/chatRoom.dart';
+import 'package:uppd/pages/singup.dart';
+
 
 import 'loading.dart';
 
@@ -23,23 +24,38 @@ class _LoginState extends State<Login> {
   var pas;
   AuthServices authServices = AuthServices();
 
-  singMeIn(){
+  singMeIn() async {
     setState(() {
       isLoading  = true;
     });
-    authServices.signInWithEmailAndPassword(emailController.text, passwordController.text).then((val){
+    try{
+   await authServices.signInWithEmailAndPassword(emailController.text, passwordController.text).then((val){
       print('${val?.uid}');
       Navigator.push(context, MaterialPageRoute(
-          builder: (context) => ExampleExpert()));
+          builder: (context) => const ChatRoom()));
     });
+    } on FirebaseAuthException catch (e){
+      Navigator.push(context, MaterialPageRoute(
+          builder: (context) => const Login()));
+
+      showDialog<String>(
+          context: context,
+          builder: (BuildContext context) => AlertDialog(
+              title: Text('Ошибка'),
+              content: Text('Данные введены неверно'),
+              actions: <Widget>[
+                TextButton(
+                  onPressed: () {Navigator.pop(context, 'OK');},
+                  child: const Text('OK'),
+                ),]
+          ));
+    }
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-        body:isLoading ?  Container(
-          child: const Loading(),
-        ):Padding(
+        body:isLoading ?  const Loading():Padding(
             padding: const EdgeInsets.only(top: 20),
             child: ListView(
               children: <Widget>[
@@ -53,6 +69,16 @@ class _LoginState extends State<Login> {
                           fontWeight: FontWeight.w800,
                           fontSize: 18),
                     )),
+                Container(
+                    alignment: Alignment.centerLeft,
+                    padding: const EdgeInsets.only(left: 30,top: 20),
+                    child: GestureDetector(
+                        onTap: (){Navigator.push(context, MaterialPageRoute(
+                            builder: (context) => const Singup()));},
+                        child: const Image(
+                          image: AssetImage('assets/arrow-point-to-right 1.png'),
+                        ))
+                ),
                 Container(
                     alignment: Alignment.centerLeft,
                     padding: const EdgeInsets.only(left: 30,top: 20),

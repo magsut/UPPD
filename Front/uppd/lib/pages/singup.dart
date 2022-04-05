@@ -1,12 +1,12 @@
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/painting.dart';
+
 import 'package:uppd/manager/auth.dart';
-import 'package:uppd/manager/auth.dart';
+import 'package:uppd/pages/chatRoom.dart';
 import 'package:uppd/pages/loading.dart';
 import 'package:uppd/pages/login.dart';
 import 'package:uppd/pages/profile.dart';
-import 'package:uppd/pages/singupName.dart';
-import 'package:firebase_core/firebase_core.dart';
+
 
 class Singup extends StatefulWidget {
   const Singup({Key? key}) : super(key: key);
@@ -22,27 +22,45 @@ class _SingupState extends State<Singup> {
   TextEditingController passwordConfirmController = TextEditingController();
   var name;
   var pas;
+  var pas1;
   final formKey = GlobalKey<FormState>();
   AuthServices authServices = AuthServices();
 
-  singMeUp(){
+  singMeUp()  async {
     setState(() {
       isLoading  = true;
     });
-    authServices.createUserWithEmailAndPassword(usernameController.text, passwordController.text).then((val){
+    try{
+     await authServices.createUserWithEmailAndPassword(usernameController.text, passwordController.text).then((val) {
       print('${val?.uid}');
       Navigator.push(context, MaterialPageRoute(
-          builder: (context) => ExampleExpert()));
+          builder: (context) => const ChatRoom()));
+
     });
+    } on FirebaseAuthException catch (e){
+      Navigator.push(context, MaterialPageRoute(
+          builder: (context) => const Singup()));
+      showDialog<String>(
+          context: context,
+          builder: (BuildContext context) => AlertDialog(
+              title: Text('Ошибка'),
+              content: Text('E-mail занят или введён неверно'),
+              actions: <Widget>[
+                TextButton(
+                  onPressed: () {Navigator.pop(context, 'OK');},
+                  child: const Text('OK'),
+                ),]
+
+          ));
+
+    }
   }
 
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-        body: isLoading ?  Container(
-          child: const Loading(),
-        ):Padding(
+        body: isLoading ?  const Loading():Padding(
             padding: const EdgeInsets.only(top: 20),
             child: ListView(
               children: <Widget>[
@@ -170,6 +188,9 @@ class _SingupState extends State<Singup> {
                         ),
                         obscureText: true,
                         controller: passwordConfirmController,
+                        onChanged: (value) {
+                          pas1 = value;
+                        },
                         decoration: const InputDecoration(
                           contentPadding: EdgeInsets.only(left: 20, bottom: 0),
                           border: InputBorder.none,
@@ -197,11 +218,25 @@ class _SingupState extends State<Singup> {
                       child: const Text('Продолжить',
                         style: TextStyle(fontSize: 18,
                             fontWeight: FontWeight.w600),),
-                      onPressed: () {
+                      onPressed: () {if(pas == pas1){
                         print(name);
                         print(pas);
                         singup(name, pas,'koklush', '34', 'jydjyytdhr');
-                        singMeUp();
+                        singMeUp();}
+                        else {
+                        showDialog<String>(
+                            context: context,
+                            builder: (BuildContext context) => AlertDialog(
+                            title: Text('Ошибка'),
+                            content: Text('Пароли не совпадают'),
+                                actions: <Widget>[
+                            TextButton(
+                            onPressed: () {Navigator.pop(context, 'OK');},
+                            child: const Text('OK'),
+                        ),]
+
+                        ));
+                      }
                       },
                     )
                 ),

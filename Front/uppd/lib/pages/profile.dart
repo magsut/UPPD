@@ -2,12 +2,12 @@ import 'package:flutter/material.dart';
 import 'package:expandable_bottom_sheet/expandable_bottom_sheet.dart';
 
 
-class ExampleExpert extends StatefulWidget {
+class Profile extends StatefulWidget {
   @override
-  _ExampleExpertState createState() => _ExampleExpertState();
+  _ProfileState createState() => _ProfileState();
 }
 
-class _ExampleExpertState extends State<ExampleExpert> {
+class _ProfileState extends State<Profile> {
   GlobalKey<ExpandableBottomSheetState> key = new GlobalKey();
   int _contentAmount = 0;
 

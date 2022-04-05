@@ -16,64 +16,78 @@ class _SearchScreenState extends State<SearchScreen> {
 
   Widget searchList(){
     return ListView.builder(
-        itemCount: ,
+        itemCount: 1,
         itemBuilder:(context, index){
           return SearchTitle(
             username: "",
             userEmail: "",
-          )
+          );
     });
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-     body: Container(
-       child: Column(
-         children: [
-           Container(
-             color: Colors.orange,
-             padding: EdgeInsets.symmetric(horizontal: 24, vertical: 16),
+     body:Padding(
+        padding: const EdgeInsets.only(top: 20),
+    child: ListView(
+    children: <Widget>[
+      Container(
+          alignment: Alignment.centerLeft,
+          padding: const EdgeInsets.only(left: 30,top: 20),
+          child: GestureDetector(
+              onTap: (){Navigator.pop(context);},
+              child: const Image(
+                image: AssetImage('assets/arrow-point-to-right 1.png'),
+              ))
+      ),
+      Container(
+          alignment: Alignment.centerLeft,
+          padding: const EdgeInsets.only(left: 30,top: 20),
+          child: const Text(
+            'Поиск',
+            style: TextStyle(
+                fontSize: 24,
+                fontWeight: FontWeight.w900,
+                letterSpacing:2),
+          )),
+      Container(
+        height: 45,
+        decoration: BoxDecoration(
+            borderRadius: BorderRadius.circular(40),
+            color: const Color(0xffF1F1F1)),
+        margin: const EdgeInsets.only(left: 30,top: 20,right: 30),
+        child: Row(
+          children: <Widget> [
+             Expanded(child:
+             TextField(
+               controller: searchEditingController,
+              style: const TextStyle(
+                  fontSize: 16,
+                  fontWeight: FontWeight.w500
+              ),
+              decoration:  const InputDecoration(
+                hintText: 'Введите имя пользователя',
+                hintStyle: TextStyle(color:Colors.black26),
+                contentPadding:EdgeInsets.only(left: 20,bottom: 0) ,
+                border: InputBorder.none,
+              ),
+            ),),
 
-             child: Row(
-               children: [
-                 Expanded(
-       child:TextField(
-         decoration: InputDecoration(
-           hintText: "search...",
-           hintStyle: TextStyle(
-             color: Colors.white
-           )
-         ),
-       )
-                 ),
-                 GestureDetector(
-                   onTap: (){
-                     databaseMethods.getUserbyUsername(searchEditingController.text).then(val){
-                       print(val.toString());
-                     };
-                   },
-                 ),
-                 Container(
-                     height: 40,
-                     width: 40,
-                     decoration: BoxDecoration(
-                       gradient: LinearGradient(
-                         colors: [
-                           const Color(0x36FFFFFF),
-                           const Color(0x0FFFFFFF)
-                         ]
-                       ),
-                       borderRadius: BorderRadius.circular(40)
-                     ),
-                     padding: EdgeInsets.all(12),
-                     child: Image.asset("assets/search_white.png"))
+            Container(
+              height: 45,
+              width: 45,
+              decoration: BoxDecoration(
+                color: Color(0xffED694A),
+                borderRadius: BorderRadius.circular(40)
+              ),
+              padding: EdgeInsets.only(left: 0),
+              child: const Icon(Icons.search,color: Colors.white),
+            )
+      ]),)
 
-               ],
-             ),
-           )
-         ],
-       ),
+       ]
+    )
      ),
     );
   }
@@ -82,7 +96,7 @@ class _SearchScreenState extends State<SearchScreen> {
 class SearchTitle extends StatelessWidget {
   final String username;
   final String userEmail;
-  SearchTitle({this.username, this.userEmail});
+  SearchTitle({required this.username, required this.userEmail});
 
 
   @override
@@ -95,16 +109,15 @@ class SearchTitle extends StatelessWidget {
               Text(username),
               Text(userEmail)
             ],
-          )
-          Spacer(),
+          ),
           Container(
             decoration: BoxDecoration(
               color: Colors.orange,
               borderRadius: BorderRadius.circular(30)
-                  
+
             ) ,
-            padding: EdgeInsets.symmetric(horizontal: 16,vertical: 8) ,
-            child: Text("Message"),
+            padding: const EdgeInsets.symmetric(horizontal: 16,vertical: 8) ,
+            child: const Text("Message"),
           )
         ],
       ),
