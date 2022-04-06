@@ -1,4 +1,5 @@
 
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:uppd/helper/helperfunctions.dart';
 import 'package:uppd/manager/auth.dart';
@@ -20,7 +21,25 @@ class ChatRoom extends StatefulWidget {
 
 class _ChatRoomState extends State<ChatRoom> {
   AuthServices authServices = AuthServices();
+  DatabaseMethods databaseMethods = DatabaseMethods();
+  Stream? chatRoomsStream;
   bool isLoading = false;
+
+  Widget chatRoomList(){
+    return StreamBuilder(
+      stream:chatRoomsStream,
+        builder: (BuildContext context,snapshot){
+        QuerySnapshot data = snapshot.requireData as QuerySnapshot;
+        return ListView.builder(
+          itemCount: data.size,
+          itemBuilder: (context,index) {
+            return Container();
+          },
+
+        );
+        }
+    );
+  }
 
   singMeOut(){
     setState(() {
@@ -34,6 +53,9 @@ class _ChatRoomState extends State<ChatRoom> {
   @override
   void initState() {
     getUserInfoGetChats();
+    databaseMethods.getChatRooms(Constants.myName).then((val){
+
+    });
     super.initState();
   }
 
