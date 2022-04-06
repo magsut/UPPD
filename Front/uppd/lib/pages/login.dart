@@ -25,6 +25,7 @@ class _LoginState extends State<Login> {
   TextEditingController passwordConfirmController = TextEditingController();
   var name;
   var pas;
+  var token;
   AuthServices authServices = AuthServices();
   DatabaseMethods databaseMethods = DatabaseMethods();
   QuerySnapshot? snapshotUserInfo;
@@ -32,10 +33,10 @@ class _LoginState extends State<Login> {
   singMeIn() async {
 
     HelperFunctions.saveUserEmailSharedPreference(emailController.text);
-    HelperFunctions.saveUserNameSharedPreference(
+    /*HelperFunctions.saveUserNameSharedPreference(
         snapshotUserInfo?.docs[0].get("userName"));
     HelperFunctions.saveUserEmailSharedPreference(
-        snapshotUserInfo?.docs[0].get("userEmail"));
+        snapshotUserInfo?.docs[0].get("userEmail"));*/
 
     setState(() {
       isLoading  = true;
@@ -48,7 +49,7 @@ class _LoginState extends State<Login> {
     try{
    await authServices.signInWithEmailAndPassword(emailController.text, passwordController.text).then((val){
       print('${val?.uid}');
-
+      token = val?.uid;
       HelperFunctions.saveUserLoggedInSharedPreference(true);
 
       Navigator.push(context, MaterialPageRoute(
@@ -198,11 +199,11 @@ class _LoginState extends State<Login> {
                       child: const Text('войти',
                         style: TextStyle(fontSize: 18,
                             fontWeight: FontWeight.w600),),
-                      onPressed: () {
+                      onPressed: () async {
                         print(name);
                         print(pas);
+                        await singMeIn();
                         login(name, pas);
-                        singMeIn();
                       },
                     )
                 ),

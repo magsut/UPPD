@@ -27,12 +27,12 @@ async function insertUser(passHash, login, name, age, token, filename, res){
             console.log(err);
             res.status(500).end(err.toString());
         }
-        res.end(token);
+        res.end(filename);
     });
 }
 
-async function searchUser(userPas, userName, res){
-    let query = `SELECT iduser FROM uppd.user where user.UserName = '${userName}' and user.Password = '${userPas}';`;
+async function searchUser(userPas, UserLogin, res){
+    let query = `SELECT iduser FROM uppd.user where user.UserLogin = '${UserLogin}' and user.Password = '${userPas}';`;
     connection.query(query, (err, result) => {
         if(err){
             console.log(err);
@@ -41,12 +41,30 @@ async function searchUser(userPas, userName, res){
         if(!result.length){
             return res.status(400).end("User is not found");
         }
-        console.log(result[0].iduser);
-        res.status(200).end(getJWToken(userPas, userName));
+        const id = result[0].iduser;
+        connection.query(query, (err, result) => {
+            if(err){
+                console.log(err);
+                return res.status(500).end("UUUUUPS: " + err.toString());
+            }
+            query = `SELECT UserName,UserLogin,Age,Icon FROM uppd.user where user.idUser = '${id}';`;
+            connection.query(query, (err, result) => {
+                if(err){
+                    console.log(err);
+                    return res.status(500).end("UUUUUPS: " + err.toString());
+                }
+                res.status(200).end(JSON.stringify({
+                    UserName: result[0].UserName,
+                    UserLogin: result[0].UserLogin,
+                    Age: result[0].Age,
+                    Icon: result[0].Icon,
+                }))
+            })
+        })
     })
 }
 
-// exports.searchUser = searchUser;
+exports.searchUser = searchUser;
 
 exports.initCon = initCon;
 

@@ -1,6 +1,6 @@
 'use strict';
 
-const {insertUser /*searchUser*/} = require("../utils/mysql");
+const {insertUser, searchUser} = require("../utils/mysql");
 const sha256 = require('crypto-js/sha256');
 const {getDate} = require('../lib/DateFormat');
 const {copyFile} = require('../lib/filestorage');
@@ -27,9 +27,9 @@ class User{
 
     async login(req, res){
         try {
-            const {pas, name} = req.body;
+            const {pas, login} = req.body;
             let passHash = sha256(pas).toString();
-            await searchUser(passHash, name, res);
+            await searchUser(passHash, login, res);
         } catch (e){
             console.log(e.massage);
             res.status(500).end("We have some problems! " + e.massage);
