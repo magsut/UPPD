@@ -40,10 +40,12 @@ class _ChatRoomState extends State<ChatRoom> {
   getUserInfoGetChats() async {
     Constants.myName = (await HelperFunctions.getUserNameSharedPreference())!;
   }
+  final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
 
   @override
   Widget build(BuildContext context) {
     return isLoading ?  const Loading():Scaffold(
+      key: _scaffoldKey,
       floatingActionButton: FloatingActionButton(
           backgroundColor: const Color(0xffED694A),
           onPressed: () {
@@ -131,6 +133,33 @@ class _ChatRoomState extends State<ChatRoom> {
               )
             ],
           ),
+        ),
+      ),
+      body: Padding(
+        padding: const EdgeInsets.only(top: 20),
+        child: ListView(
+          children: <Widget>[
+            Container(
+                alignment: Alignment.centerRight,
+                padding: const EdgeInsets.only(right: 30,top: 0),
+                child: IconButton(
+                  onPressed: () { _scaffoldKey.currentState?.openEndDrawer(); },
+                  icon:const Image(
+                    image:AssetImage('assets/topBar.png') ) ,
+                  
+                )
+            ),
+            Container(
+                alignment: Alignment.centerLeft,
+                padding: const EdgeInsets.only(left: 30,top: 20),
+                child: const Text(
+                  'Чаты',
+                  style: TextStyle(
+                      fontSize: 24,
+                      fontWeight: FontWeight.w900,
+                      letterSpacing:2),
+                )),
+          ],
         ),
       ),
 

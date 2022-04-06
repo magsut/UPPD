@@ -50,19 +50,31 @@ class _SearchScreenState extends State<SearchScreen> {
         }):Container() ;
   }
 
-  createChatRoomAndStartConversation(String userName){
-   if(userName != Constants.myName){
+  createChatRoomAndStartConversation(String userName)async{
+    if(userName != Constants.myName){
      String chatroomId = getChatRoomId(Constants.myName,userName);
      List<String> users = [Constants.myName,userName];
      Map<String, dynamic>chatRoomMap = {
        'users': users,
        'chatroomID': chatroomId
      };
-     databaseMethods.createChatRoom(chatRoomMap,chatroomId);
+    await databaseMethods.createChatRoom(chatRoomMap,chatroomId);
      Navigator.push(this.context, MaterialPageRoute(
-         builder: (context) => const Conversation()));
+         builder: (context) => Conversation(chatroomId:chatroomId,userName: userName,)));
    }else{
      print('you can not send message');
+     showDialog<String>(
+         context: this.context,
+         builder: (BuildContext context) => AlertDialog(
+             title: Text('Ошибка'),
+             content: Text('Вы не можете начать чат с собой'),
+             actions: <Widget>[
+               TextButton(
+                 onPressed: () {Navigator.pop(context, 'OK');},
+                 child: const Text('OK'),
+               ),]
+
+         ));
    }
   }
 
