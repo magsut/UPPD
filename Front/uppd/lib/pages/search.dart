@@ -5,6 +5,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:uppd/helper/constants.dart';
 import 'package:uppd/pages/conversation.dart';
+import 'package:uppd/pages/loading.dart';
 
 import '../manager/database.dart';
 
@@ -52,6 +53,9 @@ class _SearchScreenState extends State<SearchScreen> {
 
   createChatRoomAndStartConversation(String userName)async{
     if(userName != Constants.myName){
+      setState(() {
+        isLoading = true;
+      });
      String chatroomId = getChatRoomId(Constants.myName,userName);
      List<String> users = [Constants.myName,userName];
      Map<String, dynamic>chatRoomMap = {
@@ -141,7 +145,7 @@ class _SearchScreenState extends State<SearchScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-     body:Padding(
+     body: Padding(
         padding: const EdgeInsets.only(top: 20),
     child: ListView(
     children: <Widget>[

@@ -5,6 +5,7 @@ import 'package:flutter/material.dart';
 import 'package:uppd/helper/constants.dart';
 import 'package:uppd/manager/database.dart';
 import 'package:uppd/pages/chatRoom.dart';
+import 'package:uppd/pages/loading.dart';
 
 class Conversation extends StatefulWidget {
   final String chatroomId;
@@ -22,6 +23,7 @@ class _ConversationState extends State<Conversation> {
   TextEditingController messageController = TextEditingController();
   Stream? chatMessageStream;
   final String userName;
+  bool isLoading = false;
 
   _ConversationState(this.chatroomId,this.userName);
 
@@ -29,8 +31,15 @@ class _ConversationState extends State<Conversation> {
     return StreamBuilder(
       stream: chatMessageStream,
         builder: (BuildContext context,snapshot) {
+          if (!snapshot.hasData) {
+            return Loading();
+          }
+          if (snapshot.hasError) {
+            return Loading();
+          }
         QuerySnapshot data = snapshot.requireData as QuerySnapshot;
           return snapshot.hasData ? ListView.builder(
+
             itemCount:data.size,
               itemBuilder: (context,index){
               return MessageTile(
@@ -61,6 +70,7 @@ class _ConversationState extends State<Conversation> {
     databaseMethods.getConversationMessages(chatroomId).then((val){
        setState(() {
          chatMessageStream = val;
+
       });
     });
 
@@ -70,7 +80,7 @@ class _ConversationState extends State<Conversation> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: Padding(
+      body:Padding(
           padding: const EdgeInsets.only(top: 30),
           child: Stack(children: <Widget>[
             Container(

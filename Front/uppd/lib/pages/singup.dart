@@ -2,6 +2,7 @@ import 'dart:developer';
 
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:uppd/helper/helperfunctions.dart';
 
 import 'package:uppd/manager/auth.dart';
 import 'package:uppd/manager/database.dart';
@@ -42,6 +43,8 @@ class _SingupState extends State<Singup> {
      await authServices.createUserWithEmailAndPassword(emailController.text, passwordController.text).then((val) {
       print('${val?.uid}');
       this.token = val!.uid;
+      HelperFunctions.saveUserLoggedInSharedPreference(true);
+      HelperFunctions.saveUserNameSharedPreference(usernameController.text);
 
       Map<String,String> userInfoMap = {
         'name': usernameController.text,

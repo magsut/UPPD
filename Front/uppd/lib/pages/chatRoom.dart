@@ -1,5 +1,6 @@
 
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:uppd/helper/helperfunctions.dart';
 import 'package:uppd/manager/auth.dart';
@@ -10,6 +11,7 @@ import 'package:uppd/pages/search.dart';
 
 import '../helper/constants.dart';
 import '../manager/database.dart';
+import 'conversation.dart';
 
 
 class ChatRoom extends StatefulWidget {
@@ -29,11 +31,22 @@ class _ChatRoomState extends State<ChatRoom> {
     return StreamBuilder(
       stream:chatRoomsStream,
         builder: (BuildContext context,snapshot){
+          if (!snapshot.hasData) {
+            return Loading();
+          }
+
+
         QuerySnapshot data = snapshot.requireData as QuerySnapshot;
+          print('${data.docs[0].get('chatroomID').toString().replaceAll("_", "")
+              .replaceAll(Constants.myName, "")}');
         return ListView.builder(
           itemCount: data.size,
           itemBuilder: (context,index) {
-            return Container();
+            return ChatRoomTile(
+              chatRoomId: data.docs[index].get('chatroomID'),
+                userName: data.docs[index].get('chatroomID').toString().replaceAll("_", "")
+                    .replaceAll(Constants.myName, ""));
+
           },
 
         );
@@ -50,17 +63,22 @@ class _ChatRoomState extends State<ChatRoom> {
           builder: (context) => const Login()));
     });
   }
+
   @override
   void initState() {
     getUserInfoGetChats();
-    databaseMethods.getChatRooms(Constants.myName).then((val){
-
-    });
     super.initState();
   }
 
   getUserInfoGetChats() async {
     Constants.myName = (await HelperFunctions.getUserNameSharedPreference())!;
+    setState(() {
+      databaseMethods.getChatRooms(Constants.myName).then((val){
+        chatRoomsStream = val;
+        print(
+            "we got the data + ${chatRoomsStream.toString()} this is name  ${Constants.myName}");
+      });
+    });
   }
   final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
 
@@ -159,20 +177,22 @@ class _ChatRoomState extends State<ChatRoom> {
       ),
       body: Padding(
         padding: const EdgeInsets.only(top: 20),
-        child: ListView(
+        child: Stack(
           children: <Widget>[
             Container(
-                alignment: Alignment.centerRight,
+                alignment: Alignment.topRight,
+            margin: EdgeInsets.only(top: 20),
                 padding: const EdgeInsets.only(right: 30,top: 0),
                 child: IconButton(
                   onPressed: () { _scaffoldKey.currentState?.openEndDrawer(); },
                   icon:const Image(
                     image:AssetImage('assets/topBar.png') ) ,
-                  
+
                 )
             ),
             Container(
-                alignment: Alignment.centerLeft,
+                alignment: Alignment.topLeft,
+                margin: EdgeInsets.only(top: 50),
                 padding: const EdgeInsets.only(left: 30,top: 20),
                 child: const Text(
                   'Чаты',
@@ -181,6 +201,10 @@ class _ChatRoomState extends State<ChatRoom> {
                       fontWeight: FontWeight.w900,
                       letterSpacing:2),
                 )),
+            Container(child:
+            chatRoomList(),
+            margin: EdgeInsets.only(top: 100),)
+
           ],
         ),
       ),
@@ -188,4 +212,67 @@ class _ChatRoomState extends State<ChatRoom> {
     );
   }
 
+}
+class ChatRoomTile extends StatefulWidget {
+  final String userName;
+  final String chatRoomId;
+  const ChatRoomTile({Key? key,required this.userName,required this.chatRoomId}) : super(key: key);
+
+  @override
+  State<ChatRoomTile> createState() => _ChatRoomTileState(userName,chatRoomId);
+}
+
+class _ChatRoomTileState extends State<ChatRoomTile> {
+  final String userName;
+  final String chatRoomId;
+  _ChatRoomTileState(this.userName, this.chatRoomId);
+
+
+  @override
+  Widget build(BuildContext context) {
+    return GestureDetector(
+      onTap: (){
+        Navigator.push(context, MaterialPageRoute(
+            builder: (context) => Conversation(chatroomId: chatRoomId,userName: userName
+            )
+        ));
+      },
+      child: Container(
+
+        decoration: BoxDecoration(borderRadius: BorderRadius.circular(10),
+            color: Colors.black12),
+        margin: EdgeInsets.symmetric(horizontal: 24, vertical: 20),
+        padding: EdgeInsets.symmetric(vertical: 30),
+        child: Row(
+          children: [
+            Container(
+              margin: EdgeInsets.only(left: 10),
+              height: 40,
+              width: 40,
+              decoration: BoxDecoration(
+                  color: Colors.amber,
+                  borderRadius: BorderRadius.circular(30)),
+              child: Text(userName.substring(0, 1),
+                  textAlign: TextAlign.center,
+                  style: TextStyle(
+                      color: Colors.white,
+                      fontSize: 30,
+
+                      fontWeight: FontWeight.w800)),
+            ),
+            SizedBox(
+              width: 12,
+            ),
+            Text(userName,
+                textAlign: TextAlign.start,
+                style: TextStyle(
+                    color: Colors.black,
+                    fontSize: 18,
+
+                    fontWeight: FontWeight.w400))
+          ],
+        ),
+      ),
+    );
+  }
 }
