@@ -34,12 +34,12 @@ class _ChatRoomState extends State<ChatRoom> {
           if (!snapshot.hasData) {
             return Loading();
           }
-
+          if (snapshot.hasError) {
+            return Loading();
+          }
 
         QuerySnapshot data = snapshot.requireData as QuerySnapshot;
-          print('${data.docs[0].get('chatroomID').toString().replaceAll("_", "")
-              .replaceAll(Constants.myName, "")}');
-        return ListView.builder(
+        return snapshot.hasData ? ListView.builder(
           itemCount: data.size,
           itemBuilder: (context,index) {
             return ChatRoomTile(
@@ -49,9 +49,26 @@ class _ChatRoomState extends State<ChatRoom> {
 
           },
 
-        );
+        ): Container();
         }
     );
+  }
+  showOut(){
+    showDialog<String>(
+        context: context,
+        builder: (BuildContext context) => AlertDialog(
+            title: Text('Выход'),
+            content: Text('Вы точно хотите выйти с аккаунта?'),
+            actions: <Widget>[
+              TextButton(
+                onPressed: () {singMeOut(); Navigator.pop(context, 'ДА');},
+                child: const Text('ДА'),
+              ),
+              TextButton(
+                onPressed: () {Navigator.pop(context, 'НЕТ');},
+                child: const Text('НЕТ'),
+              ),]
+        ));
   }
 
   singMeOut(){
@@ -72,8 +89,8 @@ class _ChatRoomState extends State<ChatRoom> {
 
   getUserInfoGetChats() async {
     Constants.myName = (await HelperFunctions.getUserNameSharedPreference())!;
+    databaseMethods.getChatRooms(Constants.myName).then((val){
     setState(() {
-      databaseMethods.getChatRooms(Constants.myName).then((val){
         chatRoomsStream = val;
         print(
             "we got the data + ${chatRoomsStream.toString()} this is name  ${Constants.myName}");
@@ -107,9 +124,9 @@ class _ChatRoomState extends State<ChatRoom> {
               ),
               Container(
                 padding: const EdgeInsets.only(top: 100),
-                height: 250,
+                height: 500,
                 child: Column(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+
                   children: [
 
                         Padding(
@@ -130,7 +147,7 @@ class _ChatRoomState extends State<ChatRoom> {
 
 
                         Padding(
-                          padding: const EdgeInsets.only(right: 60),
+                          padding: const EdgeInsets.only(right: 60,top: 30),
                           child: GestureDetector(
 
                             child: const Text(
@@ -146,31 +163,32 @@ class _ChatRoomState extends State<ChatRoom> {
 
 
                     ),
+                    Container(
+                      alignment: Alignment.bottomRight,
+                      padding: const EdgeInsets.only(right: 30,top: 40),
+                      child: GestureDetector(
+                        onTap: () {
+                          showOut();
+                        },
+
+                        child: const Text(
+                          'Выйти с аккаунта',
+                          style: TextStyle(
+                            fontSize: 16,
+                            color: Colors.white,
+                            fontWeight: FontWeight.w400,
+                            letterSpacing: 1,
+                          ),
+                        ),
+                      ),
+
+
+                    ),
                   ],
                 ),
               ),
 
-              Container(
-                  padding: const EdgeInsets.only(top: 100, right: 20),
-                  height: 260,
-                  child: Align(
-                    alignment: Alignment.bottomRight,
-                    child: GestureDetector(
-                      onTap: () {
-                        singMeOut();
-                      },
-                      child: const Text(
-                        'Выйти с аккаунта',
-                        style: TextStyle(
-                          fontSize: 15,
-                          color: Colors.white,
-                          fontWeight: FontWeight.w400,
-                          letterSpacing: 1,
-                        ),
-                      ),
-                    ),
-                  )
-              )
+
             ],
           ),
         ),
@@ -240,7 +258,7 @@ class _ChatRoomTileState extends State<ChatRoomTile> {
       child: Container(
 
         decoration: BoxDecoration(borderRadius: BorderRadius.circular(10),
-            color: Colors.black12),
+            color: const Color(0xffF1F1F1)),
         margin: EdgeInsets.symmetric(horizontal: 24, vertical: 20),
         padding: EdgeInsets.symmetric(vertical: 30),
         child: Row(
