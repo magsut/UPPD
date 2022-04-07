@@ -4,6 +4,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:uppd/helper/helperfunctions.dart';
 import 'package:uppd/manager/auth.dart';
+import 'package:uppd/pages/about.dart';
 import 'package:uppd/pages/loading.dart';
 import 'package:uppd/pages/login.dart';
 import 'package:uppd/pages/profile.dart';
@@ -149,7 +150,9 @@ class _ChatRoomState extends State<ChatRoom> {
                         Padding(
                           padding: const EdgeInsets.only(right: 60,top: 30),
                           child: GestureDetector(
-
+                              onTap: (){
+                                Navigator.of(context).push(MaterialPageRoute(builder: (_) => const AboutUs()));
+                              },
                             child: const Text(
                               'О Приложении',
                               style: TextStyle(
