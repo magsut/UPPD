@@ -156,7 +156,6 @@ class _SingupPhotoState extends State<SingupPhoto> {
                         HelperFunctions.saveUserNameSharedPreference(name);
                         HelperFunctions.saveUserEmailSharedPreference(login);
                         HelperFunctions.saveUserAgeSharedPreference(age);
-                        HelperFunctions.saveUserPhotoSharedPreference(image!.path);
                         Navigator.push(
                             context,
                             MaterialPageRoute(

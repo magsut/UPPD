@@ -22,4 +22,17 @@ async function deleteFile(filename){
     });
 }
 
-module.exports = {copyFile, deleteFile};
+async function renameFile(fileName, newName){
+    let tmplPath = path.resolve(global.UppdApi.StoragePath);
+
+    filename = path.join(tmplPath, fileName);
+    newname = path.join(tmplPath, newName);
+
+    fs.rename(filename, newname, (err) => {
+        if(err)
+            throw new Error(err.message);
+        console.log("file is rename");
+    })
+}
+
+module.exports = {copyFile, deleteFile, renameFile};
