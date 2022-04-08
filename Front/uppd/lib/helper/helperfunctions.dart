@@ -49,4 +49,14 @@ class HelperFunctions{
     SharedPreferences preferences = await SharedPreferences.getInstance();
     return preferences.getString(sharedPreferenceUserEmailKey);
   }
+
+  static Future<String?> getUserAgeSharedPreference() async{
+    SharedPreferences preferences = await SharedPreferences.getInstance();
+    return preferences.getString(sharedPreferenceUserAgeKey);
+  }
+
+  static Future<String?> getUserPhotoSharedPreference() async{
+    SharedPreferences preferences = await SharedPreferences.getInstance();
+    return preferences.getString(sharedPreferenceUserPhotoKey);
+  }
 }

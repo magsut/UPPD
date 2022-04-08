@@ -53,6 +53,12 @@ login(String name, pas) async {
     }),
   );
   print(response.body);
+
+  var user = jsonDecode(response.body);
+  HelperFunctions.saveUserPhotoSharedPreference(user['UserName']);
+  HelperFunctions.saveUserPhotoSharedPreference(user['UserLogin']);
+  HelperFunctions.saveUserPhotoSharedPreference(user['Age']);
+  HelperFunctions.saveUserPhotoSharedPreference(user['Icon']);
 }
 
 singup(String name, pas, login, age, token, filePath) async {
@@ -73,3 +79,4 @@ singup(String name, pas, login, age, token, filePath) async {
   request.send().then((value) => print(value));
 
 }
+

@@ -45,11 +45,6 @@ class _MyHomePageState extends State<MyHomePage> {
         // Initialize FlutterFire
         future: Firebase.initializeApp(),
         builder: (context, snapshot) {
-          // Check for errors
-          if (snapshot.hasError) {
-            return Profile();
-          }
-
           // Once complete, show your application
           if (snapshot.connectionState == ConnectionState.done) {
             return Singup();
