@@ -211,8 +211,7 @@ class _ChatRoomState extends State<ChatRoom> {
                 ),
               ),
             ),
-            body: Padding(
-              padding: const EdgeInsets.only(top: 20),
+            body: SafeArea(
               child: Stack(
                 children: <Widget>[
                   Container(

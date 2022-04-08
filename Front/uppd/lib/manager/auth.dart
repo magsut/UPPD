@@ -55,9 +55,10 @@ login(String name, pas) async {
   print(response.body);
 
   var user = jsonDecode(response.body);
-  HelperFunctions.saveUserPhotoSharedPreference(user['UserName']);
-  HelperFunctions.saveUserPhotoSharedPreference(user['UserLogin']);
-  HelperFunctions.saveUserPhotoSharedPreference(user['Age']);
+  print(user);
+  HelperFunctions.saveUserNameSharedPreference(user['UserName']);
+  HelperFunctions.saveUserEmailSharedPreference(user['UserLogin']);
+  HelperFunctions.saveUserAgeSharedPreference(user['Age']);
   HelperFunctions.saveUserPhotoSharedPreference(user['Icon']);
 }
 
