@@ -150,6 +150,7 @@ class _ChatRoomState extends State<ChatRoom> {
                                         as String;
                                 String photo = await HelperFunctions
                                     .getUserPhotoSharedPreference() as String;
+                                print(age);
 
                                 Image image = await Image.network(
                                     'http://10.0.2.2:3000/api/photo/' + photo);

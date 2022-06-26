@@ -90,7 +90,7 @@ class _ProfileState extends State<Profile> {
                     ListView(children: <Widget>[
                       Container(
                           alignment: Alignment.topLeft,
-                          padding: const EdgeInsets.only(left: 20, bottom: 20),
+                          padding: const EdgeInsets.only(left: 20, bottom: 20, top: 10),
                           child: Text(
                             'Ваше имя: ' + name,
                             style: TextStyle(

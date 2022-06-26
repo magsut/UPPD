@@ -33,10 +33,6 @@ class _LoginState extends State<Login> {
   singMeIn() async {
 
     HelperFunctions.saveUserEmailSharedPreference(emailController.text);
-    /*HelperFunctions.saveUserNameSharedPreference(
-        snapshotUserInfo?.docs[0].get("userName"));
-    HelperFunctions.saveUserEmailSharedPreference(
-        snapshotUserInfo?.docs[0].get("userEmail"));*/
 
     setState(() {
       isLoading  = true;
@@ -44,7 +40,6 @@ class _LoginState extends State<Login> {
     databaseMethods.getUserByEmail(emailController.text).then((val){
       snapshotUserInfo = val;
       HelperFunctions.saveUserNameSharedPreference(snapshotUserInfo?.docs[0].get('name'));
-      // print('${snapshotUserInfo?.docs[0].get('name')}');
     });
     try{
    await authServices.signInWithEmailAndPassword(emailController.text, passwordController.text).then((val){
